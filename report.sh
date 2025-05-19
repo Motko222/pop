@@ -9,7 +9,6 @@ source $path/env
 version=$(docker exec -it popnode ./pop --version | awk '{print $NF}' | sed 's/\r//g')
 container=$(docker ps -a | grep "popnode" | awk '{print $NF}')
 docker_status=$(docker inspect $container | jq -r .[].State.Status)
-service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
 
 json1=$(curl -sk https://localhost/health)
