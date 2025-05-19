@@ -12,6 +12,6 @@ docker run -d \
   -p 443:443 \
   -v /opt/popcache:/app \
   -w /app \
-  -e POP_INVITE_CODE=9ecb5a723028d943 \
+  -e POP_INVITE_CODE=$INVITE_CODE \
   --restart unless-stopped \
   popnode
