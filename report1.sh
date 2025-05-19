@@ -6,7 +6,7 @@ json=/root/logs/report-$folder
 source /root/.bash_profile
 source $path/env
 
-version=$()
+version=$(docker exec -it popnode ./pop --version | awk '{print $NF}')
 container=$(docker ps -a | grep "popnode" | awk '{print $NF}')
 docker_status=$(docker inspect $container | jq -r .[].State.Status)
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
@@ -31,15 +31,15 @@ cat >$json << EOF
        "owner":"$OWNER"
   },
   "fields": {
-        "chain":"?",
-        "network":"?",
+        "chain":"testnet",
+        "network":"testnet",
         "version":"$version",
         "status":"$status",
         "message":"$message",
-        "service":$service,
+        "docker_status":$docker_status,
         "errors":$errors,
         "url":"",
-        "balance":"$balance"
+        "hits":"$hits"
   }
 }
 EOF
