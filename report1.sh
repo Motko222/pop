@@ -10,8 +10,12 @@ version=$()
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
 
-status="ok" && message=""
-[ $errors -gt 500 ] && status="warning" && message="errors=$errors";
+json1=$(curl -sk https://localhost/health)
+mem_hits=$(echo $json1 | jq -r .memory_cache.hits)/$(echo $json1 | jq -r .memory_cache.misses)
+disk_hits=$(echo $json1 | jq -r .disk_cache.hits)/$(echo $json1 | jq -r .disk_cache.misses)
+
+status="ok" && message="hits $mem_hits $disk_hits"
+[ $errors -gt 500 ] && status="warning" && message="hits $mem_hits $disk_hits errors=$errors";
 [ $service -ne 1 ] && status="error" && message="service not running";
 
 cat >$json << EOF
