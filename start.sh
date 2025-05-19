@@ -15,3 +15,6 @@ docker run -d \
   -e POP_INVITE_CODE=$INVITE_CODE \
   --restart unless-stopped \
   popnode
+
+sleep 1s
+docker logs -f popnode
