@@ -17,7 +17,7 @@ mem_hits=$(echo $json1 | jq -r .memory_cache.hits)/$(echo $json1 | jq -r .memory
 disk_hits=$(echo $json1 | jq -r .disk_cache.hits)/$(echo $json1 | jq -r .disk_cache.misses)
 
 status="ok" && message="hits $mem_hits $disk_hits"
-[ $errors -gt 500 ] && status="warning" && message="hits $mem_hits $disk_hits errors=$errors";
+[ $errors -gt 500 ] && status="warning" && message="hits $mem_hits $disk_hits errors=$errors"
 [ "$docker_status" -ne "running" ] && status="error" && message="not running"
 
 cat >$json << EOF
