@@ -38,8 +38,7 @@ cat >$json << EOF
         "message":"$message",
         "docker_status":"$docker_status",
         "errors":$errors,
-        "url":"",
-        "hits":"$hits"
+        "url":""
   }
 }
 EOF
