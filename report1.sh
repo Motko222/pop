@@ -7,6 +7,8 @@ source /root/.bash_profile
 source $path/env
 
 version=$()
+container=$(docker ps -a | grep "popnode" | awk '{print $NF}')
+docker_status=$(docker inspect $container | jq -r .[].State.Status)
 service=$(sudo systemctl status $folder --no-pager | grep "active (running)" | wc -l)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
 
@@ -16,7 +18,7 @@ disk_hits=$(echo $json1 | jq -r .disk_cache.hits)/$(echo $json1 | jq -r .disk_ca
 
 status="ok" && message="hits $mem_hits $disk_hits"
 [ $errors -gt 500 ] && status="warning" && message="hits $mem_hits $disk_hits errors=$errors";
-[ $service -ne 1 ] && status="error" && message="service not running";
+[ "$docker_status" -ne "running" ] && status="error" && message="not running"
 
 cat >$json << EOF
 {
