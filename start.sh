@@ -3,6 +3,15 @@
 path=$(cd -- $(dirname -- "${BASH_SOURCE[0]}") && pwd) 
 folder=$(echo $path | awk -F/ '{print $NF}')
 
-systemctl restart $folder.service
-sleep 2s
-journalctl -n 200 -u $folder.service -f --no-hostname -o cat
+docker stop popnode
+docker rm popnode
+
+docker run -d \
+  --name popnode \
+  -p 80:80 \
+  -p 443:443 \
+  -v /opt/popcache:/app \
+  -w /app \
+  -e POP_INVITE_CODE=9ecb5a723028d943 \
+  --restart unless-stopped \
+  popnode
