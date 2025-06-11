@@ -6,7 +6,7 @@ json=/root/logs/report-$folder
 source /root/.bash_profile
 source $path/env
 
-version=$(docker exec -it popnode ./pop --version | awk '{print $NF}' | sed 's/\r//g')
+version=$(docker exec popnode ./pop --version | awk '{print $NF}' | sed 's/\r//g')
 container=$(docker ps -a | grep "popnode" | awk '{print $NF}')
 docker_status=$(docker inspect $container | jq -r .[].State.Status)
 errors=$(journalctl -u $folder.service --since "1 hour ago" --no-hostname -o cat | grep -c -E "rror|ERR")
